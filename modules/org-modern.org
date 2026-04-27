@@ -1,0 +1,33 @@
+#+title:      org-modern
+#+identifier: 4c2d8f1a-6b3e-4a9c-df45-7e2a1b3c5d8f
+#+filetags:   :emacs-package:ui:
+
+* ORG-MODERN — Modern Org Style #emacs-package
+:PROPERTIES:
+:ID:       4c2d8f1a-6b3e-4a9c-df45-7e2a1b3c5d8f
+:PACKAGE:  org-modern
+:CATEGORY: ui
+:END:
+
+** Guix
+#+begin_src scheme :tangle ~/.config/guix/Operating-System/user-space/root/editors/emacs-packages/ui/org-modern.scm
+#+end_src
+
+** Config
+#+begin_src emacs-lisp :tangle config
+(setq org-modern-star '("◉" "○" "◈" "◇" "✳")
+      org-modern-table t
+      org-modern-block-name t
+      org-modern-keyword t
+      org-modern-checkbox '((?X . "☑") (?- . "☐") (?\s . "☐"))
+      org-modern-timestamp t
+      org-modern-priority t
+      org-modern-todo t
+      org-auto-align-tags nil
+      org-tags-column 0
+      org-hide-emphasis-markers t
+      org-pretty-entities t)
+
+(global-org-modern-mode)
+(setq org-startup-folded 'content)
+#+end_src

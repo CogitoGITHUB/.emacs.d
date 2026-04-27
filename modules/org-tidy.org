@@ -1,0 +1,22 @@
+#+title:      org-tidy
+#+identifier: 1d5b9e3f-7c2a-4e8d-af34-5b1c8e2d4f6a
+#+filetags:   :emacs-package:ui:
+
+* ORG-TIDY — Property Drawer Tidying #emacs-package
+:PROPERTIES:
+:ID:       1d5b9e3f-7c2a-4e8d-af34-5b1c8e2d4f6a
+:PACKAGE:  org-tidy
+:CATEGORY: ui
+:END:
+
+** Guix
+#+begin_src scheme :tangle ~/.config/guix/Operating-System/user-space/root/editors/emacs-packages/ui/org-tidy.scm
+#+end_src
+
+** Config
+#+begin_src emacs-lisp :tangle config
+(setq org-tidy-properties-style 'inline
+      org-tidy-property-drawer-property-whitelist '("PACKAGE" "CATEGORY" "ID"))
+
+(add-hook 'org-mode-hook #'org-tidy-mode)
+#+end_src

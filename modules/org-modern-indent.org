@@ -1,0 +1,20 @@
+#+title:      org-modern-indent
+#+identifier: 8f1e3b2d-5a4c-4f7e-bc67-2d8a4c6e1f3b
+#+filetags:   :emacs-package:ui:
+
+* ORG-MODERN-INDENT — Block Styling #emacs-package
+:PROPERTIES:
+:ID:       8f1e3b2d-5a4c-4f7e-bc67-2d8a4c6e1f3b
+:PACKAGE:  org-modern-indent
+:CATEGORY: ui
+:END:
+
+** Guix
+#+begin_src scheme :tangle ~/.config/guix/Operating-System/user-space/root/editors/emacs-packages/ui/org-modern-indent.scm
+#+end_src
+
+** Config
+#+begin_src emacs-lisp :tangle config
+(with-eval-after-load 'org
+  (add-hook 'org-mode-hook #'org-modern-indent-mode 90))
+#+end_src

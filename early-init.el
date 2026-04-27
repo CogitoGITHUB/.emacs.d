@@ -7,14 +7,31 @@
 (setq user-emacs-directory (expand-file-name "~/.emacs.d/"))
 
 ;; ╔══════════════════════════════════════════════════════════════════╗
-;; ║  § 2 · GUIX LOAD PATH                                          ║
+;; ║  § 2 · SUPPRESS ORG VERSION MISMATCH WARNING                   ║
+;; ╚══════════════════════════════════════════════════════════════════╝
+
+(add-to-list 'warning-suppress-types '(org-version-mismatch))
+
+;; ╔══════════════════════════════════════════════════════════════════╗
+;; ║  § 3 · GUIX PROFILE LOAD PATH                                  ║
 ;; ╚══════════════════════════════════════════════════════════════════╝
 
 (let ((site-lisp (expand-file-name "~/.guix-profile/share/emacs/site-lisp/")))
   (when (file-directory-p site-lisp)
-    (add-to-list 'load-path site-lisp)
-    (dolist (dir (directory-files site-lisp t "^[^.]"))
-      (when (file-directory-p dir)
-        (add-to-list 'load-path dir)))))
+    (let ((dirs (directory-files site-lisp t "^[^.]")))
+      (dolist (dir (reverse dirs))
+        (when (file-directory-p dir)
+          (push dir load-path))))))
+
+;; ╔══════════════════════════════════════════════════════════════════╗
+;; ║  § 4 · SYSTEM PROFILE LOAD PATH                                ║
+;; ╚══════════════════════════════════════════════════════════════════╝
+
+(let ((site-lisp "/run/current-system/profile/share/emacs/site-lisp/"))
+  (when (file-directory-p site-lisp)
+    (let ((dirs (directory-files site-lisp t "^[^.]")))
+      (dolist (dir (reverse dirs))
+        (when (file-directory-p dir)
+          (push dir load-path))))))
 
 ;;; early-init.el ends here

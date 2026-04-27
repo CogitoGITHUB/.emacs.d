@@ -1,0 +1,22 @@
+#+title:      arei
+#+identifier: 7f2d9b4e-1a3c-4e8f-bc56-9d7e2f1a3b4c
+#+filetags:   :emacs-package:guile:scheme:
+
+* AREI — Asynchronous Reliable Extensible IDE #emacs-package
+:PROPERTIES:
+:ID:       7f2d9b4e-1a3c-4e8f-bc56-9d7e2f1a3b4c
+:PACKAGE:  arei
+:CATEGORY: guile
+:END:
+
+** Guix
+#+begin_src scheme :tangle ~/.config/guix/Operating-System/user-space/root/editors/emacs-packages/emacs-arei.scm
+#+end_src
+
+** Config
+#+begin_src emacs-lisp :tangle config
+(when (locate-library "arei.el")
+  (require 'arei)
+  (setq geiser-mode-auto-p nil)
+  (add-hook 'scheme-mode-hook #'arei-mode))
+#+end_src

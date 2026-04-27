@@ -342,8 +342,7 @@ Registers the UUID into org-id-locations after writing."
           (lc--log 'ok "%d packages loaded from %d files"
                    (length lc--loaded-packages)
                    (length files))
-          (lc--denote-create-all-notes)
-          (lc--supertag-register-packages))))))
+          (lc--denote-create-all-notes))))))
 
 ;; ╔══════════════════════════════════════════════════════════════════╗
 ;; ║  § 14 · STATUS BUFFER                                          ║
