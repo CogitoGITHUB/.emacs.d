@@ -2,6 +2,8 @@
 #+identifier: 7f2d9b4e-1a3c-4e8f-bc56-9d7e2f1a3b4c
 #+filetags:   :emacs-package:guile:scheme:
 
+NEEDS : guile-ares-rs !!! 
+
 * AREI — Asynchronous Reliable Extensible IDE #emacs-package
 :PROPERTIES:
 :ID:       7f2d9b4e-1a3c-4e8f-bc56-9d7e2f1a3b4c
