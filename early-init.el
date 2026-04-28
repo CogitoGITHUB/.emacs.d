@@ -1,5 +1,13 @@
 ;;; early-init.el --- -*- lexical-binding: t -*-
 
+
+;; Disable GUI menu, tool and scroll bars early
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+
+
+
 ;; ╔══════════════════════════════════════════════════════════════════╗
 ;; ║  § 1 · USER EMACS DIRECTORY                                    ║
 ;; ╚══════════════════════════════════════════════════════════════════╝
