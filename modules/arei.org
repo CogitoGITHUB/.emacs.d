@@ -20,5 +20,7 @@ NEEDS : guile-ares-rs !!!
 (when (locate-library "arei.el")
   (require 'arei)
   (setq geiser-mode-auto-p nil)
-  (add-hook 'scheme-mode-hook #'arei-mode))
+  (setq arei-port 63225)
+  (add-hook 'scheme-mode-hook #'arei-mode)
+  (add-hook 'arei-mode-hook #'sesman-start))
 #+end_src

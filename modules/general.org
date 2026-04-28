@@ -1,0 +1,17 @@
+#+title:      general
+#+identifier: [uuid]
+#+filetags:   :emacs-package:keybinding:
+
+* GENERAL — Key Definition Framework #emacs-package
+:PROPERTIES:
+:ID:       [uuid]
+:PACKAGE:  general
+:CATEGORY: keybinding
+:END:
+
+** Guix
+
+** Config
+#+begin_src emacs-lisp :tangle config
+(general-auto-unbind-keys)
+#+end_src

@@ -1,0 +1,92 @@
+#+title:      meow
+#+identifier: [your-uuid]
+#+filetags:   :emacs-package:keybinding:
+
+* MEOW — Modal Editing #emacs-package
+:PROPERTIES:
+:ID:       [your-uuid]
+:PACKAGE:  meow
+:CATEGORY: keybinding
+:END:
+
+** Guix
+
+** Config
+#+begin_src emacs-lisp :tangle config
+(defun meow-setup ()
+  (setq meow-cheatsheet-layout meow-cheatsheet-layout-dvorak)
+  (meow-leader-define-key
+   '("1" . meow-digit-argument)
+   '("2" . meow-digit-argument)
+   '("3" . meow-digit-argument)
+   '("4" . meow-digit-argument)
+   '("5" . meow-digit-argument)
+   '("6" . meow-digit-argument)
+   '("7" . meow-digit-argument)
+   '("8" . meow-digit-argument)
+   '("9" . meow-digit-argument)
+   '("0" . meow-digit-argument)
+   '("/" . meow-keypad-describe-key)
+   '("?" . meow-cheatsheet))
+  (meow-motion-overwrite-define-key
+   '("h" . meow-prev)
+   '("s" . meow-next)
+   '("t" . meow-left)
+   '("n" . meow-right)
+   '("<escape>" . ignore))
+  (meow-normal-define-key
+   '("-" . negative-argument)
+   '(";" . meow-reverse)
+   '("," . meow-inner-of-thing)
+   '("." . meow-bounds-of-thing)
+   '("<" . meow-beginning-of-thing)
+   '(">" . meow-end-of-thing)
+   '("a" . meow-append)
+   '("A" . meow-open-below)
+   '("b" . meow-back-word)
+   '("B" . meow-back-symbol)
+   '("c" . meow-change)
+   '("d" . meow-delete)
+   '("D" . meow-backward-delete)
+   '("e" . meow-line)
+   '("E" . meow-goto-line)
+   '("f" . meow-find)
+   '("g" . meow-cancel-selection)
+   '("G" . meow-grab)
+   '("h" . meow-prev)
+   '("H" . meow-prev-expand)
+   '("i" . meow-insert)
+   '("I" . meow-open-above)
+   '("j" . meow-join)
+   '("k" . meow-kill)
+   '("l" . meow-till)
+   '("m" . meow-mark-word)
+   '("M" . meow-mark-symbol)
+   '("n" . meow-right)
+   '("N" . meow-right-expand)
+   '("o" . meow-block)
+   '("O" . meow-to-block)
+   '("p" . meow-yank)
+   '("q" . meow-quit)
+   '("r" . meow-replace)
+   '("R" . meow-swap-grab)
+   '("s" . meow-next)
+   '("S" . meow-next-expand)
+   '("t" . meow-left)
+   '("T" . meow-left-expand)
+   '("u" . meow-undo)
+   '("U" . meow-undo-in-selection)
+   '("v" . meow-visit)
+   '("w" . meow-next-word)
+   '("W" . meow-next-symbol)
+   '("x" . meow-save)
+   '("X" . meow-sync-grab)
+   '("y" . meow-yank)
+   '("z" . meow-pop-selection)
+   '("'" . repeat)
+   '("<escape>" . ignore)))
+
+(meow-setup)
+(meow-global-mode 1)
+#+end_src
+
