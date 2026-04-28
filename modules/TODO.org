@@ -1,3 +1,32 @@
+* Yasnippet nested/mirroring features (concise)
+
+Nested snippets: expand a snippet from inside another so inner snippet has independent tabstops.
+Mirrors: reuse a field elsewhere using ${n} so updating one spot updates all mirrors automatically.
+Transforms: apply elisp/text transforms to a field on insertion (e.g., lowercase, regexp replace).
+Conditional fields: evaluate elisp to choose content or whether to include a block.
+Dynamic/snippet expansion: run elisp in a snippet to compute or expand inner snippets programmatically.
+Tabstop lists & ordering: arbitrary tabstop indices, jump order, and $0 final cursor position.
+Choice fields: provide alternatives within a field (${1|opt1,opt2|}) for quick selection.
+Regex/format helpers: format or sanitize field input before insertion via evaluated expressions.
+Recursive generation: programmatically generate repeated sub-blocks (e.g., list of N subtasks) during expansion.
+Hooks & post-expand actions: code run after expansion to reposition point, run mode hooks, or trigger further completion.
+
+
+* Best completion UI pairing for this stack
+Recommendation: Vertico + Consult + Orderless + Marginalia + Embark
+
+Vertico: minimal, modal-friendly vertical completion that plays well with meow; low visual noise.
+Orderless: flexible multi-pattern matching for fast candidate narrowing.
+Marginalia: enriches candidates with annotations (type, docstring) without disrupting modal flow.
+Consult: many quick commands (buffer, file, grep) that integrate with yasnippet expansions and meow motions.
+Embark: contextual actions on completion candidates (open, insert, inspect) useful for snippet-driven workflows.
+
+* Undo, backups & safety
+
+undo-fu or undo-tree for intuitive undo navigation.
+savehist + save-place + auto-save-visited-mode to avoid losing work.
+set sensible backup directories and versioned backups.
+
 * Goals
 - Make god-mode a momentary, high-priority transient layer for single-key commands.
 - Preserve meow’s modal semantics (normal/insert/visual) and general’s leader/keybinding helpers.
