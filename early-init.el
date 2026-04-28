@@ -1,5 +1,8 @@
 ;;; early-init.el --- -*- lexical-binding: t -*-
 
+;; enable single-letter answers (y/n) globally
+(setopt use-short-answers t)
+
 
 ;; Disable GUI menu, tool and scroll bars early
 (menu-bar-mode -1)
