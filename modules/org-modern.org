@@ -23,11 +23,14 @@
       org-modern-timestamp t
       org-modern-priority t
       org-modern-todo t
+      org-modern-tag nil
+      org-modern-label-border nil
       org-auto-align-tags nil
       org-tags-column 0
       org-hide-emphasis-markers t
-      org-pretty-entities t)
+      org-pretty-entities t
+      org-modern-block-fringe nil
+      org-startup-folded 'content)
 
 (global-org-modern-mode)
-(setq org-startup-folded 'content)
 #+end_src

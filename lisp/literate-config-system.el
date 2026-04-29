@@ -112,8 +112,7 @@ Returns a plist or nil if no :PACKAGE: property found."
 ;; ╚══════════════════════════════════════════════════════════════════╝
 
 (defun lc--tangle-value (src)
-  "Return the :tangle header argument value from SRC block, or nil.
-Reads from block header args — not the properties drawer."
+  "Return the :tangle header argument value from SRC block, or nil."
   (let* ((headers (org-element-property :parameters src))
          (parsed  (when headers
                     (org-babel-parse-header-arguments headers))))
@@ -122,7 +121,9 @@ Reads from block header args — not the properties drawer."
 (defun lc--blocks-in-region (beg end tangle-type)
   "Collect emacs-lisp src-block contents in BEG..END matching TANGLE-TYPE.
 TANGLE-TYPE is the symbol 'init or 'config.
-Tangle value is read from block header args, not the properties drawer."
+- 'init   → only blocks with :tangle init
+- 'config → all emacs-lisp blocks EXCEPT :tangle no and :tangle init
+Blocks with :tangle no are always skipped."
   (let ((result '()))
     (org-element-map
         (org-element-parse-buffer) 'src-block
@@ -136,10 +137,11 @@ Tangle value is read from block header args, not the properties drawer."
                      (string= lang "emacs-lisp")
                      (pcase tangle-type
                        ('init   (equal tangle "init"))
-                       ('config (or (equal tangle "config")
-                                    (null tangle)))))
+                       ('config (not (or (equal tangle "no")
+                                         (equal tangle "init"))))))
             (push (org-element-property :value src) result)))))
     (mapconcat #'identity (nreverse result) "\n\n")))
+
 
 ;; ╔══════════════════════════════════════════════════════════════════╗
 ;; ║  § 7 · LEAF BUILDER                                            ║
@@ -191,39 +193,66 @@ Evals INIT-CODE, requires package, then evals CONFIG-CODE."
 ;; ╚══════════════════════════════════════════════════════════════════╝
 
 (defun lc--load-file (file)
-  "Process a single org FILE, loading all package headlines within it."
+  "Process a single org FILE.
+Handles both single-package and multi-package files.
+Each headline with a :PACKAGE: property is loaded as a separate package.
+Blocks are collected from that headline's subtree only.
+All emacs-lisp blocks load unless marked :tangle no."
   (condition-case err
       (with-temp-buffer
         (insert-file-contents file)
         (org-mode)
         (goto-char (point-min))
-        (while (re-search-forward "^\\* " nil t)
-          (save-excursion
-            (let* ((props    (lc--extract-props))
-                   (package  (plist-get props :package))
-                   (category (plist-get props :category)))
-              (when (and props package)
-                (let* ((h-start     (point))
-                       (h-end       (save-excursion
-                                      (org-end-of-subtree t t)
-                                      (point)))
-                       (init-code   (lc--blocks-in-region h-start h-end 'init))
-                       (config-code (lc--blocks-in-region h-start h-end 'config)))
-                  (condition-case pkg-err
-                      (progn
-                        (if lc-use-leaf
-                            (lc--silent
-                             (eval (lc--build-leaf props init-code config-code) t))
-                          (lc--load-no-leaf props init-code config-code))
-                        (push package lc--loaded-packages)
-                        (push (list package file category) lc--package-metadata))
-                    (error
-                     (let ((msg (format "%s in %s: %s"
-                                        package
-                                        (file-name-nondirectory file)
-                                        (error-message-string pkg-err))))
-                       (push (cons package msg) lc--load-errors)
-                       (lc--log 'error "%s" msg))))))))))
+        ;; Collect all headlines that have a :PACKAGE: property
+        (let ((package-headlines '()))
+          (while (re-search-forward "^\\*+ " nil t)
+            (save-excursion
+              (let ((props (lc--extract-props)))
+                (when (and props (plist-get props :package))
+                  (push (cons (point)
+                              (save-excursion
+                                (org-end-of-subtree t t)
+                                (point)))
+                        package-headlines)
+                  (push props package-headlines)))))
+          ;; package-headlines is now a flat list:
+          ;; (props end-pos props end-pos ...)
+          ;; Rebuild as alist of (props . (beg . end))
+          (let ((entries '()))
+            (goto-char (point-min))
+            (while (re-search-forward "^\\*+ " nil t)
+              (save-excursion
+                (let ((props (lc--extract-props)))
+                  (when (and props (plist-get props :package))
+                    (let* ((beg (point))
+                           (end (save-excursion
+                                  (org-end-of-subtree t t)
+                                  (point))))
+                      (push (list props beg end) entries))))))
+            ;; Process each package entry
+            (dolist (entry (nreverse entries))
+              (let* ((props    (nth 0 entry))
+                     (beg      (nth 1 entry))
+                     (end      (nth 2 entry))
+                     (package  (plist-get props :package))
+                     (category (plist-get props :category))
+                     (init-code   (lc--blocks-in-region beg end 'init))
+                     (config-code (lc--blocks-in-region beg end 'config)))
+                (condition-case pkg-err
+                    (progn
+                      (if lc-use-leaf
+                          (lc--silent
+                           (eval (lc--build-leaf props init-code config-code) t))
+                        (lc--load-no-leaf props init-code config-code))
+                      (push package lc--loaded-packages)
+                      (push (list package file category) lc--package-metadata))
+                  (error
+                   (let ((msg (format "%s in %s: %s"
+                                      package
+                                      (file-name-nondirectory file)
+                                      (error-message-string pkg-err))))
+                     (push (cons package msg) lc--load-errors)
+                     (lc--log 'error "%s" msg)))))))))
     (error
      (let ((msg (format "File load failed %s: %s"
                         (file-name-nondirectory file)
@@ -242,74 +271,33 @@ Evals INIT-CODE, requires package, then evals CONFIG-CODE."
      (directory-files-recursively directory "\\.org$")
      #'string<)))
 
+
 ;; ╔══════════════════════════════════════════════════════════════════╗
 ;; ║  § 11 · DENOTE INTEGRATION                                     ║
 ;; ╚══════════════════════════════════════════════════════════════════╝
 
-(defun lc--denote-file-exists-p (package)
-  "Return path if a Denote note for PACKAGE already exists, else nil.
-Searches `lc-denote-directory' recursively for a matching #+title."
-  (let ((files (directory-files-recursively lc-denote-directory "\\.org$")))
-    (cl-find-if
-     (lambda (f)
-       (with-temp-buffer
-         (insert-file-contents f nil 0 512)
-         (goto-char (point-min))
-         (re-search-forward
-          (format "^#\\+title:[ \t]+%s$"
-                  (regexp-quote (format "%s" package)))
-          nil t)))
-     files)))
+;; Denote is configured in modules/denote.org
+;; This section only ensures denote is available post-load
+;; and that org-id locations are saved properly
 
-(defun lc--denote-create-note (package file category)
-  "Create a Denote-compatible org note for PACKAGE.
-FILE is the source config path. CATEGORY is the package category.
-Uses org-id UUID as identifier — never a timestamp.
-Skips creation silently if a note for PACKAGE already exists.
-Registers the UUID into org-id-locations after writing."
-  (condition-case err
-      (let* ((id       (org-id-new))
-             (name     (if (symbolp package)
-                           (symbol-name package)
-                         (format "%s" package)))
-             (cat      (or category "uncategorized"))
-             (slug     (downcase
-                        (replace-regexp-in-string "[^a-z0-9]" "-" name)))
-             (cat-slug (downcase
-                        (replace-regexp-in-string "[^a-z0-9]" "-" cat)))
-             (filename (expand-file-name
-                        (format "%s--%s__%s.org" id slug cat-slug)
-                        lc-denote-directory)))
-        (unless (lc--denote-file-exists-p name)
-          (make-directory lc-denote-directory t)
-          (with-temp-file filename
-            (insert (format "#+title:      %s\n"         name))
-            (insert (format "#+identifier: %s\n"         id))
-            (insert (format "#+filetags:   :emacs-package:%s:\n" cat))
-            (insert "\n")
-            (insert (format "* %s #emacs-package\n" (upcase name)))
-            (insert ":PROPERTIES:\n")
-            (insert (format ":ID:       %s\n" id))
-            (insert (format ":PACKAGE:  %s\n" name))
-            (insert (format ":CATEGORY: %s\n" cat))
-            (insert (format ":SOURCE:   %s\n" file))
-            (insert ":END:\n\n")
-            (insert "** Guix\n\n")
-            (insert "** Config\n"))
-          (org-id-add-location id filename)))
-    (error
-     (lc--log 'error "Denote note failed for %s: %s"
-              package (error-message-string err)))))
-
-(defun lc--denote-create-all-notes ()
-  "Create Denote notes for all packages in `lc--package-metadata'."
-  (when (and (featurep 'denote) lc--package-metadata)
+(defun lc--denote-sync ()
+  "Register all loaded package files with org-id after load."
+  (when (featurep 'denote)
     (lc--silent
      (dolist (meta lc--package-metadata)
-       (lc--denote-create-note
-        (nth 0 meta)
-        (nth 1 meta)
-        (nth 2 meta))))))
+       (let ((file (nth 1 meta)))
+         (when (file-exists-p file)
+           (org-id-add-location
+            (with-temp-buffer
+              (insert-file-contents file nil 0 512)
+              (when (re-search-forward "^:ID:[ \t]+\\(.+\\)$" nil t)
+                (match-string 1)))
+            file)))))))
+
+(defun lc--denote-create-all-notes ()
+  "No-op — note creation is handled by denote.org configuration."
+  nil)
+
 
 ;; ╔══════════════════════════════════════════════════════════════════╗
 ;; ║  § 13 · MAIN ENTRY POINT                                       ║

@@ -30,7 +30,6 @@
         (bg-region "#d0d0d0")
         (fringe unspecified)))
 
-
 (load-theme 'modus-operandi :no-confirm)
 
 (defun manifold/pure-red ()
@@ -131,7 +130,8 @@
 
   ;; Orderless
   (with-eval-after-load 'orderless
-    (dolist (face '(orderless-match-face-0 orderless-match-face-1 orderless-match-face-2 orderless-match-face-3))
+    (dolist (face '(orderless-match-face-0 orderless-match-face-1
+                    orderless-match-face-2 orderless-match-face-3))
       (set-face-attribute face nil :foreground "#8B0000" :background 'unspecified :weight 'bold :inherit nil)))
 
   ;; Ivy
@@ -159,19 +159,17 @@
                             :weight 'normal :inherit nil))))
 
   ;; Mode line & header
-  (set-face-attribute 'mode-line nil :foreground "#8B0000" :background 'unspecified :box nil)
-  (set-face-attribute 'mode-line-inactive nil :foreground "#8B0000" :background 'unspecified :box nil)
+  (set-face-attribute 'mode-line nil :foreground "#8B0000" :background 'unspecified :box 'unspecified)
+  (set-face-attribute 'mode-line-inactive nil :foreground "#8B0000" :background 'unspecified :box 'unspecified)
   (set-face-attribute 'header-line nil :foreground "#8B0000" :background 'unspecified :box nil :inherit nil)
 
   ;; Cursor
   (set-face-attribute 'cursor nil :background "#808080"))
 
-
 ;; Apply immediately
 (manifold/pure-red)
 ;; Persist after theme reload
-(advice-add 'load-theme :after (lambda (&rest _) (manifold-pure-red)))
-
+(advice-add 'load-theme :after (lambda (&rest _) (manifold/pure-red)))
 ;; Apply to new frames
 (add-hook 'after-make-frame-functions (lambda (_frame) (manifold/pure-red)))
 #+end_src

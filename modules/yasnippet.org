@@ -1,0 +1,22 @@
+#+title:      yasnippet
+#+identifier: 6a2c8f3d-1b4e-4d7a-ce89-3f1d5b2a4e7c
+#+filetags:   :emacs-package:editing:
+
+* YASNIPPET — Template System #emacs-package
+:PROPERTIES:
+:ID:       6a2c8f3d-1b4e-4d7a-ce89-3f1d5b2a4e7c
+:PACKAGE:  yasnippet
+:CATEGORY: editing
+:END:
+
+** Guix
+#+begin_src scheme :tangle ~/.config/guix/Operating-System/user-space/root/editors/emacs-packages/editing/yasnippet.scm
+#+end_src
+
+** Config
+#+begin_src emacs-lisp :tangle config
+(setq yas-snippet-dirs
+      (list (expand-file-name "snippets/" user-emacs-directory)))
+
+(yas-global-mode 1)
+#+end_src

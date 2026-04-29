@@ -1,0 +1,30 @@
+#+title:      god-mode
+#+identifier: 3e7b1f4a-2c9d-4a6e-bf78-4d2e8a1c5f9b
+#+filetags:   :emacs-package:editing:
+
+* GOD-MODE — Modifier-free Commands #emacs-package
+:PROPERTIES:
+:ID:       3e7b1f4a-2c9d-4a6e-bf78-4d2e8a1c5f9b
+:PACKAGE:  god-mode
+:CATEGORY: editing
+:END:
+
+** Guix
+#+begin_src scheme :tangle ~/.config/guix/Operating-System/user-space/root/editors/emacs-packages/editing/god-mode.scm
+#+end_src
+
+** Config
+#+begin_src emacs-lisp :tangle config
+(god-mode)
+
+(global-set-key (kbd "<escape>") #'god-local-mode)
+
+(defun manifold/god-mode-update-cursor ()
+  "Update cursor style based on god-mode state."
+  (setq cursor-type (if (or god-local-mode buffer-read-only)
+                        'box
+                      'bar)))
+
+(add-hook 'god-mode-enabled-hook  #'manifold/god-mode-update-cursor)
+(add-hook 'god-mode-disabled-hook #'manifold/god-mode-update-cursor)
+#+end_src
