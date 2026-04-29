@@ -1,0 +1,19 @@
+#+title:      avy
+#+identifier: 2f4a8c1e-3b5d-4e9f-ad67-8c1e2f4a6b3d
+#+filetags:   :emacs-package:navigation:
+
+* AVY — Jump Navigation #emacs-package #navigation
+:PROPERTIES:
+:ID:       2f4a8c1e-3b5d-4e9f-ad67-8c1e2f4a6b3d
+:PACKAGE:  avy
+:CATEGORY: navigation
+:END:
+
+** Guix
+#+begin_src scheme :tangle no
+#+end_src
+
+** Config
+#+begin_src emacs-lisp
+
+#+end_src

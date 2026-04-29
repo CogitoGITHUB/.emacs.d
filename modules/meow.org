@@ -1,5 +1,5 @@
-#+title:      meow
 #+identifier: [your-uuid]
+#+title:      meow
 #+filetags:   :emacs-package:keybinding:
 
 * MEOW — Modal Editing #emacs-package
@@ -27,7 +27,12 @@
    '("9" . meow-digit-argument)
    '("0" . meow-digit-argument)
    '("/" . meow-keypad-describe-key)
-   '("?" . meow-cheatsheet))
+   '("?" . meow-cheatsheet)
+   ;; Avy — home row jumps via SPC
+   '("a" . avy-goto-char)
+   '("o" . avy-goto-char-2)
+   '("e" . avy-goto-line)
+   '("u" . avy-goto-word-1))
   (meow-motion-overwrite-define-key
    '("h" . meow-prev)
    '("s" . meow-next)
