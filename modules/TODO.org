@@ -1,7 +1,6 @@
 * https://github.com/rougier/svg-lib
 
-* 
-
+* nano emacs packages as well
 * Best completion UI pairing for this stack
 Recommendation: Vertico + Consult + Orderless + Marginalia + Embark
 
