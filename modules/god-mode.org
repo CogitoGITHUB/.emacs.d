@@ -15,16 +15,16 @@
 
 ** Config
 #+begin_src emacs-lisp :tangle config
-(god-mode)
+  ;; (god-mode)
 
-(global-set-key (kbd "<escape>") #'god-local-mode)
+  ;; (global-set-key (kbd "<escape>") #'god-local-mode)
 
-(defun manifold/god-mode-update-cursor ()
-  "Update cursor style based on god-mode state."
-  (setq cursor-type (if (or god-local-mode buffer-read-only)
-                        'box
-                      'bar)))
+  ;; (defun manifold/god-mode-update-cursor ()
+  ;;   "Update cursor style based on god-mode state."
+  ;;   (setq cursor-type (if (or god-local-mode buffer-read-only)
+  ;;                         'box
+  ;;                       'bar)))
 
-(add-hook 'god-mode-enabled-hook  #'manifold/god-mode-update-cursor)
-(add-hook 'god-mode-disabled-hook #'manifold/god-mode-update-cursor)
+  ;; (add-hook 'god-mode-enabled-hook  #'manifold/god-mode-update-cursor)
+  ;; (add-hook 'god-mode-disabled-hook #'manifold/god-mode-update-cursor)
 #+end_src

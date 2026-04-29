@@ -1,4 +1,6 @@
+* https://github.com/rougier/svg-lib
 
+* 
 
 * Best completion UI pairing for this stack
 Recommendation: Vertico + Consult + Orderless + Marginalia + Embark
