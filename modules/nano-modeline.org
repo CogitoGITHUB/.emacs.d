@@ -1,0 +1,31 @@
+#+title:      nano-modeline
+#+identifier: 7b3d5f1a-9c6e-4b8f-de12-8f2a4d6b3c5f
+#+filetags:   :emacs-package:ui:
+
+* NANO-MODELINE — Minimal Modeline #emacs-package #ui
+:PROPERTIES:
+:ID:       7b3d5f1a-9c6e-4b8f-de12-8f2a4d6b3c5f
+:PACKAGE:  nano-modeline
+:CATEGORY: ui
+:END:
+
+** Config
+#+begin_src emacs-lisp
+  (with-eval-after-load 'nano-modeline
+    ;; Prog modes
+    (add-hook 'prog-mode-hook            #'nano-modeline-prog-mode)
+    ;; Text/org modes
+    (add-hook 'text-mode-hook            #'nano-modeline-text-mode)
+    (add-hook 'org-mode-hook             #'nano-modeline-org-mode)
+    ;; PDF
+    (add-hook 'pdf-view-mode-hook        #'nano-modeline-pdf-mode)
+    ;; Term
+    (add-hook 'term-mode-hook            #'nano-modeline-term-mode)
+    (add-hook 'vterm-mode-hook           #'nano-modeline-term-mode)
+    ;; Messages
+    (add-hook 'messages-buffer-mode-hook #'nano-modeline-message-mode)
+
+    ;; Default for everything else
+    (nano-modeline-text-mode t))
+  (setq-default mode-line-format nil)
+#+end_src

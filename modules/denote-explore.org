@@ -1,0 +1,17 @@
+#+title:      denote-explore
+#+identifier: 3e1b7d9f-5a4c-4f6e-bf78-6c8e4f2b5d1a
+#+filetags:   :emacs-package:notes:
+
+* DENOTE-EXPLORE — Explore Denote Notes #emacs-package #notes
+:PROPERTIES:
+:ID:       3e1b7d9f-5a4c-4f6e-bf78-6c8e4f2b5d1a
+:PACKAGE:  denote-explore
+:CATEGORY: notes
+:END:
+
+** Config
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-c n e s") #(quote denote-explore-count-notes))
+(global-set-key (kbd "C-c n e r") #(quote denote-explore-random-note))
+(global-set-key (kbd "C-c n e g") #(quote denote-explore-network))
+#+end_src

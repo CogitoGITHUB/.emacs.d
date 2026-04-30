@@ -1,0 +1,17 @@
+#+title:      nerd-icons
+#+identifier: 1e7b9c5f-3a4d-4e6f-af56-2a8e4f6b1c3d
+#+filetags:   :emacs-package:ui:
+
+* NERD-ICONS — Icon Library #emacs-package #ui
+:PROPERTIES:
+:ID:       1e7b9c5f-3a4d-4e6f-af56-2a8e4f6b1c3d
+:PACKAGE:  nerd-icons
+:CATEGORY: ui
+:END:
+
+** Config
+#+begin_src emacs-lisp
+(with-eval-after-load 'dired
+  (when (fboundp 'nerd-icons-dired-mode)
+    (nerd-icons-dired-mode 1)))
+#+end_src

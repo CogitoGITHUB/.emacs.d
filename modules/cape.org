@@ -1,0 +1,17 @@
+#+title:      cape
+#+identifier: 5b1c4e3f-7d2a-4f8e-cd89-4f2b6d8e3c5f
+#+filetags:   :emacs-package:completion:
+
+* CAPE — Completion Extensions #emacs-package #completion
+:PROPERTIES:
+:ID:       5b1c4e3f-7d2a-4f8e-cd89-4f2b6d8e3c5f
+:PACKAGE:  cape
+:CATEGORY: completion
+:END:
+
+** Config
+#+begin_src emacs-lisp
+(add-to-list (quote completion-at-point-functions) #(quote cape-dabbrev))
+(add-to-list (quote completion-at-point-functions) #(quote cape-file))
+(add-to-list (quote completion-at-point-functions) #(quote cape-elisp-block))
+#+end_src

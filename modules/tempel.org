@@ -1,0 +1,19 @@
+#+title:      tempel
+#+identifier: 7c3e5f2a-9b4d-4a7f-de12-6d4c8f2a5e7b
+#+filetags:   :emacs-package:editing:
+
+* TEMPEL — Template System #emacs-package #editing
+:PROPERTIES:
+:ID:       7c3e5f2a-9b4d-4a7f-de12-6d4c8f2a5e7b
+:PACKAGE:  tempel
+:CATEGORY: editing
+:END:
+
+** Config
+#+begin_src emacs-lisp
+(setq tempel-path
+      (expand-file-name "templates/*.eld" user-emacs-directory))
+
+(global-set-key (kbd "M-+") #(quote tempel-complete))
+(global-set-key (kbd "M-*") #(quote tempel-insert))
+#+end_src

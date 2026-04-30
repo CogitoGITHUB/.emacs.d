@@ -1,0 +1,16 @@
+#+title:      fzf
+#+identifier: 2b4d6f8a-1c3e-4a7f-bd90-3e5a7c9f2b4d
+#+filetags:   :emacs-package:navigation:
+
+* FZF — Fuzzy Finder #emacs-package #navigation
+:PROPERTIES:
+:ID:       2b4d6f8a-1c3e-4a7f-bd90-3e5a7c9f2b4d
+:PACKAGE:  fzf
+:CATEGORY: navigation
+:END:
+
+** Config
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-c f") #(quote fzf))
+(global-set-key (kbd "C-c F") #(quote fzf-directory))
+#+end_src

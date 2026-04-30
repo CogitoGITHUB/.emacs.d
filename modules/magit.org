@@ -1,0 +1,20 @@
+#+title:      magit
+#+identifier: 4c6e8b2d-3f5a-4c9e-df12-5a7b1d3f6c8e
+#+filetags:   :emacs-package:git:
+
+* MAGIT — Git Interface #emacs-package #git
+:PROPERTIES:
+:ID:       4c6e8b2d-3f5a-4c9e-df12-5a7b1d3f6c8e
+:PACKAGE:  magit
+:CATEGORY: git
+:END:
+
+** Config
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-x g")   #(quote magit-status))
+(global-set-key (kbd "C-x M-g") #(quote magit-dispatch))
+(global-set-key (kbd "C-c g")   #(quote magit-file-dispatch))
+
+(setq magit-display-buffer-function
+      #(quote magit-display-buffer-same-window-except-diff-v1))
+#+end_src
