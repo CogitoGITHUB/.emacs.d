@@ -1,15 +1,5 @@
 * https://github.com/rougier/svg-lib
 
-* nano emacs packages as well
-* Best completion UI pairing for this stack
-Recommendation: Vertico + Consult + Orderless + Marginalia + Embark
-
-Vertico: minimal, modal-friendly vertical completion that plays well with meow; low visual noise.
-Orderless: flexible multi-pattern matching for fast candidate narrowing.
-Marginalia: enriches candidates with annotations (type, docstring) without disrupting modal flow.
-Consult: many quick commands (buffer, file, grep) that integrate with yasnippet expansions and meow motions.
-Embark: contextual actions on completion candidates (open, insert, inspect) useful for snippet-driven workflows.
-
 * Undo, backups & safety
 
 undo-fu or undo-tree for intuitive undo navigation.
