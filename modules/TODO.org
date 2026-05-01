@@ -1,3 +1,6 @@
+
+* https://github.com/kn66/vertico-posframe-preview
+
 * https://github.com/rougier/svg-lib
 
 * Undo, backups & safety
