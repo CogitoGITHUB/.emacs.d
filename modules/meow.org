@@ -15,7 +15,49 @@
 #+begin_src emacs-lisp :tangle config
 (defun meow-setup ()
   (setq meow-cheatsheet-layout meow-cheatsheet-layout-dvorak)
+  (setq meow-keypad-start-timeout 0)
+  (setq meow-keypad-describe-delay 0.5)
+
+  ;; ── Leader (SPC) ─────────────────────────────────────────────────────────
   (meow-leader-define-key
+   ;; Left home row = avy (primary movement)
+   '("a" . avy-goto-char-timer)
+   '("o" . avy-goto-char-2)
+   '("e" . avy-goto-line)
+   '("u" . avy-goto-word-1)
+
+   ;; Right home row = buffer/window ops
+   '("h" . previous-buffer)
+   '("t" . other-window)
+   '("n" . next-buffer)
+   '("s" . save-buffer)
+   '("d" . kill-current-buffer)
+
+   ;; ── App launchers — punctuation/outer keys so nothing clashes ──
+   '("d" . dired-jump)            ; open dired at current file's dir
+   '("=" . magit-status)          ; magit root — then use full magit kbd
+
+   ;; ── Tab-bar (panner) — under SPC TAB ──
+   '("TAB TAB" . tab-bar-switch-to-tab)      ; switch by name (with completion)
+   '("TAB n"   . tab-bar-new-tab)            ; new tab
+   '("TAB d"   . tab-bar-close-tab)          ; close current tab
+   '("TAB r"   . tab-bar-rename-tab)         ; rename
+   '("TAB h"   . tab-bar-switch-to-prev-tab) ; prev tab
+   '("TAB s"   . tab-bar-switch-to-next-tab) ; next tab
+   '("TAB m"   . tab-move)                   ; reorder tab left/right
+
+   ;; ── Org — single keys under SPC (no sub-prefix) ──
+   '("m" . org-capture)           ; eMit/capture
+   '("q" . org-agenda)            ; Query agenda
+   '("r" . org-refile)            ; Refile
+   '("[" . org-narrow-to-subtree)
+   '("]" . widen)
+   '("!" . org-todo)              ; cycle todo state
+   '("@" . org-priority)          ; set priority
+   '("i" . org-clock-in)
+   '("k" . org-clock-out)
+
+   ;; Digits + help
    '("1" . meow-digit-argument)
    '("2" . meow-digit-argument)
    '("3" . meow-digit-argument)
@@ -27,72 +69,141 @@
    '("9" . meow-digit-argument)
    '("0" . meow-digit-argument)
    '("/" . meow-keypad-describe-key)
-   '("?" . meow-cheatsheet)
-   ;; Avy — home row jumps via SPC
-   '("a" . avy-goto-char)
-   '("o" . avy-goto-char-2)
-   '("e" . avy-goto-line)
-   '("u" . avy-goto-word-1))
+   '("?" . meow-cheatsheet))
+
+  ;; ── Motion mode ───────────────────────────────────────────────────────────
   (meow-motion-overwrite-define-key
-   '("h" . meow-prev)
-   '("s" . meow-next)
-   '("t" . meow-left)
-   '("n" . meow-right)
    '("<escape>" . ignore))
+
+  ;; ── Normal mode ───────────────────────────────────────────────────────────
   (meow-normal-define-key
+   ;; Left home row
+   '("a" . avy-goto-char-timer)   ; universal jump — type chars to land anywhere
+   '("A" . meow-append)
+   '("o" . org-cycle)             ; fold/unfold heading
+   '("O" . org-clock-out)
+   '("e" . org-next-visible-heading)
+   '("E" . meow-goto-line)
+   '("u" . org-previous-visible-heading)
+   '("U" . meow-undo-in-selection)
+   ;; Right home row: kill / copy / paste / select
+   '("h" . meow-kill)
+   '("H" . meow-backward-delete)
+   '("t" . meow-save)
+   '("T" . meow-sync-grab)
+   '("n" . meow-yank)
+   '("N" . meow-yank-pop)
+   '("s" . meow-mark-word)
+   '("S" . meow-mark-symbol)
+   ;; Index fingers: delete, insert, change
+   '("d" . meow-delete)
+   '("D" . meow-backward-delete)
+   '("i" . meow-insert)
+   '("I" . meow-open-above)
+   '("c" . org-capture)            ; capture (change → C instead)
+   '("C" . meow-change)
+   ;; Word motions
+   '("w" . meow-next-word)
+   '("W" . meow-next-symbol)
+   '("b" . meow-back-word)
+   '("B" . meow-back-symbol)
+   '("m" . meow-mark-word)
+   '("M" . meow-mark-symbol)
+   ;; Find / till
+   '("f" . meow-find)
+   '("l" . meow-till)
+   ;; Misc
    '("-" . negative-argument)
    '(";" . meow-reverse)
    '("," . meow-inner-of-thing)
    '("." . meow-bounds-of-thing)
    '("<" . meow-beginning-of-thing)
    '(">" . meow-end-of-thing)
-   '("a" . meow-append)
-   '("A" . meow-open-below)
-   '("b" . meow-back-word)
-   '("B" . meow-back-symbol)
-   '("c" . meow-change)
-   '("d" . meow-delete)
-   '("D" . meow-backward-delete)
-   '("e" . meow-line)
-   '("E" . meow-goto-line)
-   '("f" . meow-find)
    '("g" . meow-cancel-selection)
    '("G" . meow-grab)
-   '("h" . meow-prev)
-   '("H" . meow-prev-expand)
-   '("i" . meow-insert)
-   '("I" . meow-open-above)
    '("j" . meow-join)
    '("k" . meow-kill)
-   '("l" . meow-till)
-   '("m" . meow-mark-word)
-   '("M" . meow-mark-symbol)
-   '("n" . meow-right)
-   '("N" . meow-right-expand)
-   '("o" . meow-block)
-   '("O" . meow-to-block)
    '("p" . meow-yank)
    '("q" . meow-quit)
    '("r" . meow-replace)
    '("R" . meow-swap-grab)
-   '("s" . meow-next)
-   '("S" . meow-next-expand)
-   '("t" . meow-left)
-   '("T" . meow-left-expand)
-   '("u" . meow-undo)
-   '("U" . meow-undo-in-selection)
    '("v" . meow-visit)
-   '("w" . meow-next-word)
-   '("W" . meow-next-symbol)
-   '("x" . meow-save)
+   '("x" . meow-kill)
    '("X" . meow-sync-grab)
-   '("y" . meow-yank)
    '("z" . meow-pop-selection)
    '("'" . repeat)
    '("<escape>" . ignore)))
 
 (meow-setup)
 (meow-global-mode 1)
+(delete-selection-mode 1) ; typing or DEL replaces active selection
+
+;; ── Avy ───────────────────────────────────────────────────────────────────────
+(with-eval-after-load 'avy
+  (setq avy-timeout-seconds 0.3)
+  (setq avy-style 'at-full)
+  (setq avy-keys '(?a ?o ?e ?u ?h ?t ?n ?s)))
+
+;; ── Magit — full keyboard, own bindings, not home row ────────────────────────
+;; SPC = gets you to magit-status, then magit's own keys take over.
+;; These are magit's built-in keys you'll use most:
+;;   s   stage        u   unstage
+;;   c c commit       P p push
+;;   F p pull         b b branch
+;;   l l log          d d diff
+;;   z z stash        !   run
+;; No custom rebinding needed — magit's defaults are already excellent.
+(with-eval-after-load 'magit
+  (setq magit-display-buffer-function
+        #'magit-display-buffer-fullframe-status-v1)) ; full frame, use your pane control
+
+;; ── Org ───────────────────────────────────────────────────────────────────────
+(with-eval-after-load 'org
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "NEXT(n)" "IN-PROGRESS(i)" "|" "DONE(d)" "CANCELLED(c)")))
+  (setq org-capture-templates
+        '(("t" "Task" entry (file+headline "~/org/inbox.org" "Tasks")
+           "* TODO %?\n  %U\n  %a")
+          ("n" "Note" entry (file+headline "~/org/inbox.org" "Notes")
+           "* %?\n  %U")))
+  (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
+  (setq org-refile-use-outline-path t)
+  (setq org-outline-path-complete-in-steps nil))
+
+;; ── Tab-bar ───────────────────────────────────────────────────────────────────
+(setq tab-bar-show 1)
+(setq tab-bar-new-tab-choice "*scratch*")
+(setq tab-bar-tab-hints t)
+(tab-bar-mode 1)
+
+;; Jump to tab by number with M-1..9
+(dotimes (i 9)
+  (global-set-key (kbd (format "M-%d" (1+ i)))
+                  (lambda () (interactive)
+                    (tab-bar-select-tab (1+ i)))))
+
+;; ── Dired ─────────────────────────────────────────────────────────────────────
+(with-eval-after-load 'dired
+  (add-hook 'dired-mode-hook
+            (lambda ()
+              ;; Movement
+              (local-set-key (kbd "a") #'avy-goto-char-timer)
+              (local-set-key (kbd "h") #'dired-previous-line)
+              (local-set-key (kbd "s") #'dired-next-line)
+              (local-set-key (kbd "t") #'dired-up-directory)
+              (local-set-key (kbd "n") #'dired-find-file)
+              ;; Left home row — ops
+              (local-set-key (kbd "a") #'dired-do-rename)
+              (local-set-key (kbd "o") #'dired-find-file)
+              (local-set-key (kbd "e") #'find-file)
+              (local-set-key (kbd "u") #'dired-up-directory)
+              ;; Kill/copy/delete
+              (local-set-key (kbd "k") #'dired-do-copy)
+              (local-set-key (kbd "d") #'dired-do-delete)
+              (local-set-key (kbd "m") #'dired-mark)
+              (local-set-key (kbd "SPC") #'dired-find-file)
+              (local-set-key (kbd "RET") #'dired-find-file)
+              (local-set-key (kbd "q") #'quit-window))))
 #+end_src
 
 
