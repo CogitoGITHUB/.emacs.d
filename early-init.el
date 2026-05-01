@@ -1,5 +1,13 @@
 ;;; early-init.el --- -*- lexical-binding: t -*-
 
+;;; Early line-breaking salvation
+(setq-default truncate-lines nil)          ; The core: nil = wrap/continue lines instead of truncating
+(setq-default word-wrap t)                 ; Wrap at word boundaries, not mid-word like a savage
+
+;; Optional but highly recommended for "visual" feel (respects words, moves by screen lines)
+(add-hook 'after-init-hook #'global-visual-line-mode)
+
+
 ;; enable single-letter answers (y/n) globally
 (setopt use-short-answers t)
 
